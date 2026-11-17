@@ -19,6 +19,28 @@ class ActionResult(BaseModel):
     ok: bool
     message: str
     entry: dict[str, Any] | None = None
+    assessment: dict[str, Any] | None = None
+
+
+class BatchCheck(BaseModel):
+    """多选整组提交时的逐条核对结果。"""
+
+    id: int
+    ok: bool
+    message: str
+    code: str | None = Field(default=None, alias="方案编号")
+    status: str | None = None
+
+    model_config = {"populate_by_name": True}
+
+
+class BatchResult(BaseModel):
+    """整组提交结果：checks 为逐条核对，assessments 为生成的结项明细。"""
+
+    ok: bool
+    message: str
+    checks: list[dict[str, Any]] = Field(default_factory=list)
+    assessments: list[dict[str, Any]] = Field(default_factory=list)
 
 
 class EntryPayload(BaseModel):
